@@ -1,0 +1,12 @@
+target/
+.metals/
+.bloop/
+.direnv/
+result
+result-*
+.vscode/
+.idea/
+*.class
+*.log
+*~
+*.swp

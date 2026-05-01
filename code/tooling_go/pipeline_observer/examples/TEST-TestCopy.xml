@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<testsuite hostname="DESKTOP-I9APAL0" name="TestCopy" tests="2" errors="0" failures="0" skipped="0"
-    time="0.062" timestamp="2026-04-27T16:59:58">
+<testsuite hostname="DESKTOP-I9APAL0" name="TestCopy" tests="3" errors="0" failures="0" skipped="1"
+    time="0.061" timestamp="2026-05-01T15:23:42">
     <properties>
         <property name="java.specification.version" value="21" />
         <property name="sun.jnu.encoding" value="UTF-8" />
@@ -27,7 +27,7 @@
         <property name="log4j.ignoreTCL" value="true" />
         <property name="file.encoding" value="UTF-8" />
         <property name="jnidispatch.path"
-            value="/home/ruben/.cache/JNA/temp/jna420425639536828880.tmp" />
+            value="/home/ruben/.cache/JNA/temp/jna7894423703709916962.tmp" />
         <property name="jna.loaded" value="true" />
         <property name="java.io.tmpdir" value="/tmp" />
         <property name="java.version" value="21.0.10" />
@@ -65,14 +65,17 @@
             value="/usr/lib/x86_64-linux-gnu:/lib/x86_64-linux-gnu:/usr/lib64:/lib64:/usr/lib:/lib:/usr/lib/x86_64-linux-gnu/libfakeroot:/usr/lib/wsl/lib" />
         <property name="java.vendor.url.bug" value="https://bugreport.java.com/bugreport/" />
         <property name="user.dir"
-            value="/home/ruben/dev/bachelor/project/code/scala/todolist_example" />
+            value="/home/ruben/dev/bachelor/project/code/sample_project_scala/scala/todolist_example" />
         <property name="os.arch" value="amd64" />
         <property name="java.vm.info" value="mixed mode, sharing" />
         <property name="java.vm.version" value="21.0.10+7-nixos" />
         <property name="java.class.version" value="65.0" />
     </properties>
-    <testcase classname="TestCopy" name="testCopy()" time="0.062">
+    <testcase classname="TestCopy" name="testCopy()" time="0.061">
 
+    </testcase>
+    <testcase classname="TestCopy" name="testDisabled()" time="0.0">
+        <skipped />
     </testcase>
     <testcase classname="TestCopy" name="testEquality()" time="0.0">
 

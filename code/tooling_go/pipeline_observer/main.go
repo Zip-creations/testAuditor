@@ -27,8 +27,9 @@ func main() {
 			fmt.Println("Error unmarshaling XML: ", err)
 			continue
 		}
-
-		fmt.Println("Found: ", testsuite.Testcases[len(testsuite.Testcases)-1].Failure)  // Debug
+		for _, testcase := range testsuite.Testcases {
+			fmt.Println("Found:", testcase.IsSkipped())  // Debug
+		}
 	}
 }
 

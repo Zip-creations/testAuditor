@@ -1,4 +1,5 @@
 target/
+.scala-build/
 .metals/
 .bloop/
 .direnv/

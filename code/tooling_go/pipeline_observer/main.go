@@ -6,36 +6,49 @@ import "encoding/xml"
 import "path/filepath"
 
 func main() {
-	path := "./examples"  // TODO: ask path on first start of tool. NiceToHave: Make it configurable
+	allSuites, err := ReadTestSuites("./examples")  // TODO: ask path on first start of tool. NiceToHave: Make it configurable
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	report := CreateReport("Test Report", allSuites)
+	WriteXMLToFile(report, "./out/report.xml")
+	fmt.Println("Successfully created report: \n", report)  // Debug
+}
+
+func ReadTestSuites(path string) (Testsuites, error) {
+	var allSuites Testsuites
 	content, err := os.ReadDir(path)
 	if err != nil {
 		fmt.Println("Error reading files: ", err)
-		return
+		return allSuites, err
 	}
 	content = filterForXML(content)
-	var allSuites []TestSuiteReport
-	var totalFailed, totalSkipped int = 0, 0
 	for _, entry := range content {
 		filePath := filepath.Join(path, entry.Name())
-		data, err := os.ReadFile(filePath)
+		testSuit, err := ReadTestSuite(filePath)
 		if err != nil {
-			fmt.Println("Error unmarshaling XML: ", err)
-			continue
+			fmt.Println(err)  // TODO: log error somehow
+			continue  // If one file is broken: skip and continue with the others
 		}
-
-		var testsuite Testsuite
-		err = xml.Unmarshal(data, &testsuite)
-		if err != nil {
-			fmt.Println("Error unmarshaling XML: ", err)
-			continue
-		}
-		allSuites = append(allSuites, CreateTestSuiteReport(testsuite, &totalFailed, &totalSkipped))
-		for _, testcase := range testsuite.Testcases {
-			fmt.Println("Found:", testcase.IsSkipped())  // Debug
-		}
+		allSuites.Testsuites = append(allSuites.Testsuites, testSuit)
 	}
-	report := CreateReport("Test Report", totalFailed, totalSkipped, allSuites)
-	WriteXMLToFile(report, "./out/report.xml")
+	return allSuites, nil
+}
+
+func ReadTestSuite(filePath string) (Testsuite, error) {
+	var testsuite Testsuite
+	data, err := os.ReadFile(filePath)
+	if err != nil {
+		fmt.Println("Error while reading file: ", err)
+		return testsuite, err
+	}
+	err = xml.Unmarshal(data, &testsuite)
+	if err != nil {
+		fmt.Println("Error while unmarshaling XML: ", err)
+		return testsuite, err
+	}
+	return testsuite, nil
 }
 
 func filterForXML(files []os.DirEntry) []os.DirEntry {
@@ -48,12 +61,17 @@ func filterForXML(files []os.DirEntry) []os.DirEntry {
 	return xmlFiles
 }
 
-func CreateReport(name string, totalFailed, totalSkipped int, testSuites []TestSuiteReport) Report {
+func CreateReport(name string, testSuites Testsuites) Report {
+	var totalFailed, totalSkipped int = 0, 0
+	allSuites := []TestSuiteReport{}
+	for _, testsuite := range testSuites.Testsuites {
+		allSuites = append(allSuites, CreateTestSuiteReport(testsuite, &totalFailed, &totalSkipped))
+	}
 	return Report{
 		Name: name,
 		TotalFailed: totalFailed,
 		TotalSkipped: totalSkipped,
-		TestSuites: testSuites,
+		TestSuites: allSuites,
 	}
 }
 

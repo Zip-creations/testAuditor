@@ -1,13 +1,13 @@
-<report name="Test Report" totalFailed="1" totalSkipped="1">
-  <testSuiteReport name="TestAddingItems" timestamp="2026-05-01T15:23:42">
+<report name="Test Report" totalRun="6" totalFailed="1" totalSkipped="1">
+  <testSuiteReport name="TestAddingItems" timestamp="2026-05-01T15:23:42" totalRunSuite="1" totalFailedSuite="0" totalSkippedSuite="0">
     <testCaseReport name="testTodo()" result="passed"></testCaseReport>
   </testSuiteReport>
-  <testSuiteReport name="TestCopy" timestamp="2026-05-01T15:23:42">
+  <testSuiteReport name="TestCopy" timestamp="2026-05-01T15:23:42" totalRunSuite="3" totalFailedSuite="0" totalSkippedSuite="1">
     <testCaseReport name="testCopy()" result="passed"></testCaseReport>
     <testCaseReport name="testDisabled()" result="skipped"></testCaseReport>
     <testCaseReport name="testEquality()" result="passed"></testCaseReport>
   </testSuiteReport>
-  <testSuiteReport name="TestRemovingItems" timestamp="2026-05-01T15:23:42">
+  <testSuiteReport name="TestRemovingItems" timestamp="2026-05-01T15:23:42" totalRunSuite="2" totalFailedSuite="1" totalSkippedSuite="0">
     <testCaseReport name="testTodo()" result="passed"></testCaseReport>
     <testCaseReport name="testPositive()" result="failed"></testCaseReport>
   </testSuiteReport>

@@ -62,32 +62,38 @@ func filterForXML(files []os.DirEntry) []os.DirEntry {
 }
 
 func CreateReport(name string, testSuites Testsuites) Report {
-	var totalFailed, totalSkipped int = 0, 0
+	var totalRun, totalFailed, totalSkipped int = 0, 0, 0
 	allSuites := []TestSuiteReport{}
 	for _, testsuite := range testSuites.Testsuites {
-		allSuites = append(allSuites, CreateTestSuiteReport(testsuite, &totalFailed, &totalSkipped))
+		allSuites = append(allSuites, CreateTestSuiteReport(testsuite, &totalRun, &totalFailed, &totalSkipped))
 	}
 	return Report{
 		Name: name,
+		TotalRun: totalRun,
 		TotalFailed: totalFailed,
 		TotalSkipped: totalSkipped,
 		TestSuites: allSuites,
 	}
 }
 
-func CreateTestSuiteReport(testsuite Testsuite, totalFailed *int, totalSkipped *int) TestSuiteReport {
+func CreateTestSuiteReport(testsuite Testsuite, totalRun *int, totalFailed *int, totalSkipped *int) TestSuiteReport {
 	var testCases []TestCaseReport
+	var totalRunSuite, totalFailedSuite, totalSkippedSuite int = 0, 0, 0
 	for _, testcase := range testsuite.Testcases {
 		var result TestStatus
 		if testcase.IsSkipped() {
 			*totalSkipped++
+			totalSkippedSuite++
 			result = StatusSkipped
 		} else if testcase.HasFailed() {
 			*totalFailed++
+			totalFailedSuite++
 			result = StatusFailed
 		} else {
 			result = StatusPassed
 		}
+		*totalRun++
+		totalRunSuite++
 		testCases = append(testCases, TestCaseReport{
 			Name:   testcase.Name,
 			Result: result,
@@ -96,6 +102,9 @@ func CreateTestSuiteReport(testsuite Testsuite, totalFailed *int, totalSkipped *
 	return TestSuiteReport{
 		Name:          testsuite.Name,
 		Timestamp: testsuite.Timestamp,
+		TotalRunSuite: totalRunSuite,
+		TotalFailedSuite: totalFailedSuite,
+		TotalSkippedSuite: totalSkippedSuite,
 		TestCases:     testCases,
 	}
 }

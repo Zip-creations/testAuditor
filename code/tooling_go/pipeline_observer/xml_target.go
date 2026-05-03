@@ -12,6 +12,7 @@ const (
 type Report struct {
 	XMLName xml.Name `xml:"report"`
 	Name string `xml:"name,attr"`
+	TotalRun int `xml:"totalRun,attr"`
 	TotalFailed int `xml:"totalFailed,attr"`
 	TotalSkipped int `xml:"totalSkipped,attr"`
 	TestSuites []TestSuiteReport `xml:"testSuiteReport"`
@@ -20,6 +21,9 @@ type Report struct {
 type TestSuiteReport struct {
 	Name string `xml:"name,attr"`
 	Timestamp string `xml:"timestamp,attr,omitempty"`
+	TotalRunSuite int `xml:"totalRunSuite,attr"`
+	TotalFailedSuite int `xml:"totalFailedSuite,attr"`
+	TotalSkippedSuite int `xml:"totalSkippedSuite,attr"`	
 	TestCases []TestCaseReport `xml:"testCaseReport"`
 }
 

@@ -15,7 +15,9 @@
 
     devShells.x86_64-linux.default = pkgs.mkShell {
       buildInputs = [
-        pkgs.python3
+        (pkgs.python3.withPackages (ps: [
+          ps.junit-xml
+        ]))
       ];
     };
   };

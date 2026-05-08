@@ -1,0 +1,31 @@
+from classes.ToDoList import ToDoList, ToDoItem
+import pytest
+
+def test_add_item():
+    todo_list = ToDoList("Alice")
+    item1 = ToDoItem("Item 1")
+    item2 = ToDoItem("Item 2")
+    todo_list.addItem(item1)
+    todo_list.addItem(item2)
+    assert len(todo_list.items) == 2
+    assert todo_list.items[0] == item1
+    assert todo_list.items[1] == item2
+
+def test_removing_items():
+    todo_list = ToDoList("Bob")
+    item1 = ToDoItem("Item 1")
+    item2 = ToDoItem("Item 2")
+    todo_list.addItem(item1)
+    assert todo_list.items[0] == item1
+    todo_list.addItem(item2)
+    assert todo_list.items[1] == item2
+    todo_list.removeItemByID(0)
+    with pytest.raises(KeyError):
+        _ = todo_list.items[0]
+    assert len(todo_list.items) == 1
+    assert 0 not in todo_list.items
+    assert 1 in todo_list.items
+
+@pytest.mark.skip(reason="this test will be skipped, to see how pytest handles skipped tests in JUnit XML reports")
+def test_skipping():
+    assert True

@@ -27,5 +27,13 @@ $(CATCH_BIN): $(CATCH_SRC)
 test_catch: $(CATCH_BIN)
 	./$(CATCH_BIN) -r junit -o tests/out/catch2/report_catch.xml
 
+find_gtest: $(GTEST_BIN)
+	@./$(GTEST_BIN) --gtest_list_tests | awk '\
+	/\.$$/ { suite=$$0; sub(/\.$$/, "", suite); next } \
+	{ gsub(/^ +/, "", $$0); print suite "::" $$0 }'
+
+find_catch: $(CATCH_BIN)
+	@./$(CATCH_BIN) --list-tests | sed '1d;$$d'
+
 clean:
 	rm -rf build *.xml

@@ -1,6 +1,6 @@
 from classes.ToDoList import ToDoList, ToDoItem
 
-def test_add_item():
+def test_copy():
     todo_list1 = ToDoList("Alice")
     todo_list2 = ToDoList("Alice")
     todo_list3 = todo_list1.copy()

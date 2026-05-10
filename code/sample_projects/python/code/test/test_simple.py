@@ -1,7 +1,7 @@
 from classes.ToDoList import ToDoList, ToDoItem
 import pytest
 
-def test_add_item():
+def test_add_item(record_property):
     todo_list = ToDoList("Alice")
     item1 = ToDoItem("Item 1")
     item2 = ToDoItem("Item 2")
@@ -10,6 +10,12 @@ def test_add_item():
     assert len(todo_list.items) == 2
     assert todo_list.items[0] == item1
     assert todo_list.items[1] == item2
+
+    record_property("example_key", 1)  # adds a custom property inside the <testcase> element in the JUnit XML report
+    # output in JUnit XML:
+    # <properties>
+    #   <property name="example_key" value="1" />
+    # </properties>
 
 def test_removing_items():
     todo_list = ToDoList("Bob")

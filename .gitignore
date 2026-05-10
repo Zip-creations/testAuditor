@@ -21,3 +21,6 @@ target/
 __pycache__/
 *.pyc
 .pytest_cache/
+
+#cpp
+build/

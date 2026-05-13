@@ -6,21 +6,12 @@
 
 OUTPUT=$(PYTHONPATH=code python3 -m pytest --collect-only -q)
 
-RESULT="("
-FIRST=1
+echo '<?xml version="1.0" encoding="utf-8"?>'
+echo '<testsuites>'
 
 while IFS= read -r line; do
-    file="${line%%::*}"
-    test="${line##*::}"
-
-    if [ $FIRST -eq 0 ]; then
-        RESULT+=", "
-    fi
-
-    RESULT+="(${file}, ${test})"
-    FIRST=0
+    [[ "$line" != *"::"* ]] && continue
+    echo "    <testcase qualifiedName=\"$line\"/>"
 done <<< "$OUTPUT"
 
-RESULT+=")"
-
-echo "$RESULT"
+echo '</testsuites>'

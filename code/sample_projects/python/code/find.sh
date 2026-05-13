@@ -7,11 +7,11 @@
 OUTPUT=$(PYTHONPATH=code python3 -m pytest --collect-only -q)
 
 echo '<?xml version="1.0" encoding="utf-8"?>'
-echo '<testsuites>'
+echo '<testsuite>'
 
 while IFS= read -r line; do
     [[ "$line" != *"::"* ]] && continue
     echo "    <testcase qualifiedName=\"$line\"/>"
 done <<< "$OUTPUT"
 
-echo '</testsuites>'
+echo '</testsuite>'

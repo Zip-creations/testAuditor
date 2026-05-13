@@ -11,4 +11,5 @@
     <testCaseReport name="testTodo()" result="passed"></testCaseReport>
     <testCaseReport name="testPositive()" result="failed"></testCaseReport>
   </testSuiteReport>
+  <testSuiteReport name="pytest tests" testsTotal="0" testsRun="0" testsSkipped="0"></testSuiteReport>
 </report>

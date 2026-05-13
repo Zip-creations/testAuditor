@@ -2,18 +2,36 @@ package main
 
 import "fmt"
 import "os"
+import "os/exec"
 import "encoding/xml"
 import "path/filepath"
+import "bytes"
 
 func main() {
-	allSuites, err := ReadTestSuites("./examples")  // TODO: ask path on first start of tool. NiceToHave: Make it configurable
+	allSuites, err := ReadTestSuites("./examples/jUnit_XML")  // TODO: ask path on first start of tool. NiceToHave: Make it configurable
 	if err != nil {
 		fmt.Println(err)
 		return
 	}
+	output, err := RunTestDiscoveryScript("examples/sample_find.sh")
+	fmt.Println(output, "\n")  // Debug
 	report := CreateReport("Test Report", allSuites)
 	WriteXMLToFile(report, "./out/report.xml")
 	fmt.Println("Successfully created report: \n", report)  // Debug
+}
+
+func RunTestDiscoveryScript(path string) (Testsuite, error) {
+	cmd := exec.Command("bash", path)
+	var out bytes.Buffer
+	var stderr bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &stderr
+
+	err := cmd.Run()
+	if err != nil {
+		return Testsuite{}, fmt.Errorf("Error executing test discovery script: %w\n%s", err, stderr.String())
+	}
+	return XMLtoTestSuite([]byte(out.String()), &Testsuite{})
 }
 
 func ReadTestSuites(path string) (Testsuites, error) {
@@ -40,15 +58,17 @@ func ReadTestSuite(filePath string) (Testsuite, error) {
 	var testsuite Testsuite
 	data, err := os.ReadFile(filePath)
 	if err != nil {
-		fmt.Println("Error while reading file: ", err)
-		return testsuite, err
+		return testsuite, fmt.Errorf("Error while reading file:\n %s\n %w", filePath, err)
 	}
-	err = xml.Unmarshal(data, &testsuite)
+	return XMLtoTestSuite(data, &testsuite)
+}
+
+func XMLtoTestSuite(data []byte, suite *Testsuite) (Testsuite, error) {
+	err := xml.Unmarshal(data, suite)
 	if err != nil {
-		fmt.Println("Error while unmarshaling XML: ", err)
-		return testsuite, err
+		return *suite, fmt.Errorf("Error while unmarshalling TestSuite XML:\n %w", err)
 	}
-	return testsuite, nil
+	return *suite, err
 }
 
 func filterForXML(files []os.DirEntry) []os.DirEntry {
@@ -114,7 +134,7 @@ func CreateTestSuiteReport(testsuite Testsuite, totalRun *int, totalFailed *int,
 func WriteXMLToFile(report Report, filePath string) error {
 	data, err := xml.MarshalIndent(report, "", "  ")
 	if err != nil {
-		return err
+		return fmt.Errorf("Error while marshalling Report XML:\n %w", err)
 	}
 	return os.WriteFile(filePath, data, 0644)
 }

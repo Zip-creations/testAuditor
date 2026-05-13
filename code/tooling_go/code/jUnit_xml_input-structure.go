@@ -13,8 +13,9 @@ type Testsuite struct {
 }
 
 type Testcase struct {
-	Classname string `xml:"classname,attr"`
-	Name string `xml:"name,attr"`
+	Classname string `xml:"classname,attr,omitempty"`
+	Name string `xml:"name,attr,omitempty"`
+	QualifiedName string `xml:"qualifiedName,attr,omitempty"`
 	Failure *Failure `xml:"failure,omitempty"`
 	Skipped *Skipped `xml:"skipped,omitempty"`
 }

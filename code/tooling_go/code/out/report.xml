@@ -1,15 +1,10 @@
 <Testsuites>
   <testsuites name="pytest">
-    <testcase classname="test.test_identity" name="test_copy"
-      qualifiedName="test/test_identity.py::test_copy" result="passed"></testcase>
-    <testcase classname="test.test_simple" name="test_add_item"
-      qualifiedName="test/test_simple.py::test_add_item" result="passed"></testcase>
-    <testcase classname="test.test_simple" name="test_removing_items"
-      qualifiedName="test/test_simple.py::test_removing_items" result="passed"></testcase>
-    <testcase classname="test.test_simple" name="test_skipping"
-      qualifiedName="test/test_simple.py::test_skipping" result="skipped">
-      <skipped
-        message="this test will be skipped, to see how pytest handles skipped tests in JUnit XML reports"></skipped>
+    <testcase classname="test.test_identity" name="test_copy" qualifiedName="test/test_identity.py::test_copy" result="passed"></testcase>
+    <testcase classname="test.test_simple" name="test_add_item" qualifiedName="test/test_simple.py::test_add_item" result="passed"></testcase>
+    <testcase classname="test.test_simple" name="test_removing_items" qualifiedName="test/test_simple.py::test_removing_items" result="passed"></testcase>
+    <testcase classname="test.test_simple" name="test_skipping" qualifiedName="test/test_simple.py::test_skipping" result="skipped">
+      <skipped message="this test will be skipped, to see how pytest handles skipped tests in JUnit XML reports"></skipped>
     </testcase>
   </testsuites>
 </Testsuites>

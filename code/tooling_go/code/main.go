@@ -5,7 +5,6 @@ import "os"
 import "os/exec"
 import "encoding/xml"
 import "path/filepath"
-import "bytes"
 import dt "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/pipeline_observer/datatypes"
 
 func main() {
@@ -32,16 +31,11 @@ func main() {
 
 func RunTestDiscoveryScript(path string) (dt.DiscoveryTestsuite, error) {
 	cmd := exec.Command("bash", path)
-	var out bytes.Buffer
-	var stderr bytes.Buffer
-	cmd.Stdout = &out
-	cmd.Stderr = &stderr
-
-	err := cmd.Run()
+	out, err := cmd.CombinedOutput()
 	if err != nil {
-		return dt.DiscoveryTestsuite{}, fmt.Errorf("Error executing test discovery script: %w\n%s", err, stderr.String())
+		return dt.DiscoveryTestsuite{}, fmt.Errorf("Error executing test discovery script: %w\n%s", err, out)
 	}
-	return XMLtoDiscoveryTestsuite([]byte(out.String()), &dt.DiscoveryTestsuite{})
+	return XMLtoDiscoveryTestsuite([]byte(out), &dt.DiscoveryTestsuite{})
 }
 
 func XMLtoDiscoveryTestsuite(data []byte, suite *dt.DiscoveryTestsuite) (dt.DiscoveryTestsuite, error) {
@@ -110,6 +104,7 @@ func MatchTests(discoverySuite dt.DiscoveryTestsuite, junitSuites dt.JUnitTestsu
 		for _, junitSuite := range junitSuites.Testsuites {
 			for _, junitTestcase := range junitSuite.Testcases {
 				if testcaseXML.Name == junitTestcase.Name && testcaseXML.Classname == junitTestcase.Classname {
+					found = true
 					testcase.Failure = junitTestcase.Failure
 					testcase.Skipped = junitTestcase.Skipped
 					if testcase.Skipped != nil {
@@ -127,7 +122,6 @@ func MatchTests(discoverySuite dt.DiscoveryTestsuite, junitSuites dt.JUnitTestsu
 						suit = &matchedSuites.Testsuites[len(matchedSuites.Testsuites)-1]
 					}
 					suit.Testcases = append(suit.Testcases, testcase)
-					found = true
 					break
 				}
 			}

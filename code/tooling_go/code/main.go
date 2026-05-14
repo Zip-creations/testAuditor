@@ -25,9 +25,9 @@ func main() {
 	}
 	fmt.Println(allSuites, "\n")  // Debug
 
-	report := CreateReport("Test Report", allSuites)
-	WriteXMLToFile(report, "./out/report.xml")
-	fmt.Println("Successfully created report: \n", report)  // Debug
+	// report := CreateReport("Test Report", allSuites)
+	// WriteXMLToFile(report, "./out/report.xml")
+	// fmt.Println("Successfully created report: \n", report)  // Debug
 }
 
 func RunTestDiscoveryScript(path string) (dt.DiscoveryTestsuite, error) {
@@ -99,56 +99,6 @@ func filterForXML(files []os.DirEntry) []os.DirEntry {
 }
 
 // ~~~~~~~~~
-
-func CreateReport(name string, testSuites dt.JUnitTestsuites) Report {
-	var totalRun, totalFailed, totalSkipped int = 0, 0, 0
-	allSuites := []TestSuiteReport{}
-	for _, testsuite := range testSuites.Testsuites {
-		allSuites = append(allSuites, CreateTestSuiteReport(testsuite, &totalRun, &totalFailed, &totalSkipped))
-	}
-	return Report{
-		Name: name,
-		TestsTotal: totalRun + totalSkipped,
-		TestsRun: totalRun,
-		// TestsFailed: totalFailed,
-		TestsSkipped: totalSkipped,
-		TestSuites: allSuites,
-	}
-}
-
-func CreateTestSuiteReport(testsuite dt.JUnitTestsuite, totalRun *int, totalFailed *int, totalSkipped *int) TestSuiteReport {
-	var testCases []TestCaseReport
-	var totalRunSuite, totalFailedSuite, totalSkippedSuite int = 0, 0, 0
-	for _, testcase := range testsuite.Testcases {
-		var result TestStatus
-		if testcase.IsSkipped() {
-			*totalSkipped++
-			totalSkippedSuite++
-			result = StatusSkipped
-		} else if testcase.HasFailed() {
-			*totalFailed++
-			totalFailedSuite++
-			result = StatusFailed
-		} else {
-			result = StatusPassed
-		}
-		*totalRun++
-		totalRunSuite++
-		testCases = append(testCases, TestCaseReport{
-			Name:   testcase.Name,
-			Result: result,
-		})
-	}
-	return TestSuiteReport{
-		Name:          testsuite.Name,
-		Timestamp: testsuite.Timestamp,
-		TestsTotal: totalRunSuite + totalSkippedSuite,
-		TestsRun: totalRunSuite,
-		// TestsFailedSuite: totalFailedSuite,
-		TestsSkipped: totalSkippedSuite,
-		TestCases:     testCases,
-	}
-}
 
 func WriteXMLToFile(report Report, filePath string) error {
 	data, err := xml.MarshalIndent(report, "", "  ")

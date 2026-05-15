@@ -4,12 +4,21 @@ import "fmt"
 import "os"
 import "os/exec"
 import "encoding/xml"
+import "encoding/json"
 import "path/filepath"
 import dt "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/pipeline_observer/datatypes"
 
 func main() {
+	// Read config
+	config, err := ReadConfig("./config.json")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	fmt.Println(config, "\n")  // Debug
+	
 	// Read all existing tests from the user-configured script
-	allSuites, err := RunTestDiscoveryScript("examples/sample_find.sh")  // TODO: Read from config.json
+	allSuites, err := RunTestDiscoveryScript(config.TestDiscoveryPath)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -17,7 +26,7 @@ func main() {
 	fmt.Println(allSuites, "\n")  // Debug
 
 	// Read all tests in the JUnit XML output of the last run (if existing)
-	allSuitesJUnit, err := ReadJUnitTestSuites("./examples/jUnit_XML")  // TODO: Read from config.json
+	allSuitesJUnit, err := ReadJUnitTestSuites(config.JUnitXMLDirectory)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -25,8 +34,21 @@ func main() {
 	fmt.Println(allSuitesJUnit, "\n")  // Debug
 
 	report := MatchTests(allSuites, allSuitesJUnit)
-	WriteXMLToFile(report, "./out/report.xml")
+	WriteXMLToFile(report, config.OutputPath)
 	fmt.Println("Successfully created report: \n", report)  // Debug
+}
+
+func ReadConfig(path string) (dt.Config, error) {
+	var config dt.Config
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return config, fmt.Errorf("Error while reading config file:\n %s\n %w", path, err)
+	}
+	err = json.Unmarshal(data, &config)
+	if err != nil {
+		return config, fmt.Errorf("Error while unmarshalling config JSON:\n %w", err)
+	}
+	return config, nil
 }
 
 func RunTestDiscoveryScript(path string) (dt.DiscoveryTestsuite, error) {

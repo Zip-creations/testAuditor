@@ -1,0 +1,5 @@
+{
+    "testDiscoveryPath": "./examples/sample_find.sh",
+    "jUnitXMLDirectory": "./examples/jUnit_XML",
+    "outputPath": "./out/report.xml"
+}

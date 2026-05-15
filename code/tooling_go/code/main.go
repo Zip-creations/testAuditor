@@ -112,13 +112,15 @@ func ReadJUnitTestSuite(filePath string) ([]dt.JUnitTestsuite, error) {
 	if err != nil {
 		return nil, fmt.Errorf("error while reading file:\n %s\n %w", filePath, err)
 	}
-	if err := xml.Unmarshal(data, &testsuite); err == nil {
+	marshalErr1 := xml.Unmarshal(data, &testsuite)
+	if marshalErr1 == nil {
 		return []dt.JUnitTestsuite{testsuite}, nil
 	}
-	if err := xml.Unmarshal(data, &testsuites); err == nil {
+	marshalErr2 := xml.Unmarshal(data, &testsuites)
+	if marshalErr2 == nil {
 		return testsuites.Testsuites, nil
 	}
-	return testsuites.Testsuites, nil
+	return testsuites.Testsuites, fmt.Errorf("Error while unmarshalling JUnit XML:\n %s\n %w\n %w", filePath, marshalErr1, marshalErr2)
 }
 
 func filterForXML(files []os.DirEntry) []os.DirEntry {

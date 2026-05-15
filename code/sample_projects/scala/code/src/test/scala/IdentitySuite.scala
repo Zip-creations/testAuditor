@@ -1,8 +1,11 @@
+package sample_projects.scala.code.test
+
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions._
 import org.junit.jupiter.api.Disabled
 import todolist.*
 import scala.collection.mutable.Map
+
 
 class TestCopy {
   @Test

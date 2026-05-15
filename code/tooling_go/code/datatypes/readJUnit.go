@@ -1,8 +1,6 @@
 package datatypes
 
 
-// TODO: The XML structure can have two different root elements: <testsuites> and <testsuite>. Tool must be able to process both.
-// Currently, <testsuite> is assumed as root
 type JUnitTestsuites struct {
 	Testsuites []JUnitTestsuite `xml:"testsuites"`
 }

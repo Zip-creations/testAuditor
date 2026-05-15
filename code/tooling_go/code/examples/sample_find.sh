@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # example output of find.sh, pytest style
 echo '<?xml version="1.0" encoding="utf-8"?>'
 echo '<testsuite>'

@@ -16,7 +16,7 @@ func main() {
 		return
 	}
 	fmt.Println(config, "\n")  // Debug
-	
+
 	// Read all existing tests from the user-configured script
 	allSuites, err := RunTestDiscoveryScript(config.TestDiscoveryPath)
 	if err != nil {
@@ -51,9 +51,8 @@ func ReadConfig(path string) (dt.Config, error) {
 	return config, nil
 }
 
-func RunTestDiscoveryScript(path string) (dt.DiscoveryTestsuite, error) {
-	cmd := exec.Command("bash", path)
-	out, err := cmd.CombinedOutput()
+func RunTestDiscoveryScript(command dt.Command) (dt.DiscoveryTestsuite, error) {
+	out, err := exec.Command(command.Name, command.Args...).CombinedOutput()
 	if err != nil {
 		return dt.DiscoveryTestsuite{}, fmt.Errorf("Error executing test discovery script: %w\n%s", err, out)
 	}

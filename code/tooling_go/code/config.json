@@ -1,6 +1,6 @@
 {
     "testDiscoveryPath": {
-        "name": "./examples/sample_find.sh",
+        "command": "./examples/sample_find.sh",
         "args": []
     },
     "jUnitXMLDirectory": "./examples/jUnit_XML",

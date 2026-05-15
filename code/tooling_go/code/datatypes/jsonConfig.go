@@ -8,6 +8,6 @@ type Config struct {
 }
 
 type Command struct {
-	Name string `json:"name"`
+	Command string `json:"command"`
 	Args []string `json:"args"`
 }

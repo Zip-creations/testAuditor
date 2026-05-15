@@ -15,7 +15,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(config, "\n")  // Debug
+	fmt.Println("config:\n", config, "\n")  // Debug
 
 	// Read all existing tests from the user-configured script
 	allSuites, err := RunTestDiscoveryScript(config.TestDiscoveryPath)
@@ -23,7 +23,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(allSuites, "\n")  // Debug
+	fmt.Println("Suits from discovery:\n", allSuites, "\n")  // Debug
 
 	// Read all tests in the JUnit XML output of the last run (if existing)
 	allSuitesJUnit, err := ReadJUnitTestSuites(config.JUnitXMLDirectory)
@@ -31,7 +31,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println(allSuitesJUnit, "\n")  // Debug
+	fmt.Println("suites from JUnit XML:\n", allSuitesJUnit, "\n")  // Debug
 
 	report := MatchTests(allSuites, allSuitesJUnit)
 	WriteXMLToFile(report, config.OutputPath)
@@ -52,7 +52,7 @@ func ReadConfig(path string) (dt.Config, error) {
 }
 
 func RunTestDiscoveryScript(command dt.Command) (dt.DiscoveryTestsuite, error) {
-	out, err := exec.Command(command.Name, command.Args...).CombinedOutput()
+	out, err := exec.Command(command.Command, command.Args...).CombinedOutput()
 	if err != nil {
 		return dt.DiscoveryTestsuite{}, fmt.Errorf("Error executing test discovery script: %w\n%s", err, out)
 	}
@@ -69,13 +69,11 @@ func XMLtoDiscoveryTestsuite(data []byte, suite *dt.DiscoveryTestsuite) (dt.Disc
 
 func ReadJUnitTestSuites(path string) (dt.JUnitTestsuites, error) {
 	var allSuites dt.JUnitTestsuites
-	content, err := os.ReadDir(path)
+	content, err := ReadDirRekursive(path)
 	if err != nil {
 		return allSuites, fmt.Errorf("Error reading directory:\n %s\n %w", path, err)
 	}
-	content = filterForXML(content)
-	for _, entry := range content {
-		filePath := filepath.Join(path, entry.Name())
+	for _, filePath := range content {
 		testSuit, err := ReadJUnitTestSuite(filePath)
 		if err != nil {
 			fmt.Println(err)  // TODO: log error somehow
@@ -84,6 +82,27 @@ func ReadJUnitTestSuites(path string) (dt.JUnitTestsuites, error) {
 		allSuites.Testsuites = append(allSuites.Testsuites, testSuit)
 	}
 	return allSuites, nil
+}
+
+func ReadDirRekursive(path string) ([]string, error) {
+	var allPaths []string
+	entries, err := os.ReadDir(path)
+	if err != nil {
+		return allPaths, err
+	}
+	for _, entry := range entries {
+		fullPath := filepath.Join(path, entry.Name())
+		if entry.IsDir() {
+			subPaths, err := ReadDirRekursive(fullPath)
+			if err != nil {
+				return allPaths, err
+			}
+			allPaths = append(allPaths, subPaths...)
+		} else {
+			allPaths = append(allPaths, fullPath)
+		}
+	}
+	return allPaths, nil
 }
 
 func ReadJUnitTestSuite(filePath string) (dt.JUnitTestsuite, error) {

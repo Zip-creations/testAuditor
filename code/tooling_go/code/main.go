@@ -31,7 +31,7 @@ func main() {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("suites from JUnit XML:\n", allSuitesJUnit, "\n")  // Debug
+	fmt.Println("Suites from JUnit XML:\n", allSuitesJUnit, "\n")  // Debug
 
 	report := MatchTests(allSuites, allSuitesJUnit)
 	WriteXMLToFile(report, config.OutputPath)

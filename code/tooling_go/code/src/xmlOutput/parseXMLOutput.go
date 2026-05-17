@@ -1,10 +1,12 @@
 package xmlOutput
 
 import shared "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/shared"
+import "encoding/xml"
 
 
 type Testsuites struct {
-	Testsuites []Testsuite `xml:"testsuites"`
+	XMLName   xml.Name    `xml:"testsuites"`
+	Testsuites []Testsuite `xml:"testsuite"`
 }
 
 type Testsuite struct {
@@ -28,7 +30,3 @@ const (
     StatusSkipped TestStatus = "skipped"
 	StatusNotExecuted TestStatus = "notExecuted"
 )
-
-func (t Testcase) hasRun() bool {
-    return t.Result != "notExecuted"
-}

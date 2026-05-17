@@ -1,8 +1,5 @@
 package xmlOutput
 
-import "fmt"
-import "os"
-import "encoding/xml"
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/testDiscovery"
 import junit "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/jUnit"
 
@@ -62,12 +59,4 @@ func FindTestsuiteByName(suites []Testsuite, name string) *Testsuite {
 		}
 	}
 	return nil
-}
-
-func WriteXMLToFile(report Testsuites, filePath string) error {
-	data, err := xml.MarshalIndent(report, "", "  ")
-	if err != nil {
-		return fmt.Errorf("Error while marshalling Report XML:\n %w", err)
-	}
-	return os.WriteFile(filePath, data, 0644)
 }

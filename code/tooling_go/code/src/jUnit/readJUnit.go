@@ -62,13 +62,3 @@ func ReadJUnitTestSuite(filePath string) ([]JUnitTestsuite, error) {
 	}
 	return testsuites.Testsuites, fmt.Errorf("Error while unmarshalling JUnit XML:\n %s\n %w\n %w", filePath, marshalErr1, marshalErr2)
 }
-
-func filterForXML(files []os.DirEntry) []os.DirEntry {
-	var xmlFiles []os.DirEntry
-	for _, file := range files {
-		if file.Name()[len(file.Name())-4:] == ".xml" {
-			xmlFiles = append(xmlFiles, file)
-		}
-	}
-	return xmlFiles
-}

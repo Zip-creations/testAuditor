@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # base Output:
 # test/test_identity.py::test_copy
 # test/test_simple.py::test_add_item

@@ -1,0 +1,5 @@
+<testsuites>
+  <testsuite name="catch_tests">
+    <testcase classname="catch_tests.global" name="Addition" qualifiedName="Addition" result="passed"></testcase>
+  </testsuite>
+</testsuites>

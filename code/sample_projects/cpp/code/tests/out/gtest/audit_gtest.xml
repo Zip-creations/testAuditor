@@ -1,0 +1,5 @@
+<testsuites>
+  <testsuite name="MathTest">
+    <testcase classname="MathTest" name="Addition" qualifiedName="MathTest::Addition" result="passed"></testcase>
+  </testsuite>
+</testsuites>

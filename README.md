@@ -1,6 +1,8 @@
 # optimize_CI_deterministic_builds
 This repository contains both the latex files for my bachelor thesis, as well as the accompanying code of the practical implementation.
 
+Tool can be build with
+`go build -o testAuditor`
 # Damit ein Projekt diese Tool benutzen kann, muss gelten:
 
 - Das Test-Framework ist in der Lage einzelne Tests aus einer Suite gezielt ausführen
@@ -11,7 +13,7 @@ This repository contains both the latex files for my bachelor thesis, as well as
 ```
 {
     "testDiscoveryPath": {
-        "command": "path/to/sricp.sh",
+        "command": "path/to/sricpt.sh",
         "args": []
     },
     "jUnitXMLDirectory": "path/to/directory",

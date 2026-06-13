@@ -1,3 +1,11 @@
 #!/bin/bash
 
+while read oldrev newrev refname
+do
+    if [[ "$refname" == refs/notes/* ]]; then
+        continue
+    fi
+    git notes show "$newrev" 2>/dev/null || echo "Keine Note gefunden"
+done
+
 echo "Hello from post-receive hook!"

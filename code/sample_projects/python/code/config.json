@@ -3,6 +3,5 @@
         "command": "./testDiscovery.sh",
         "args": []
     },
-    "jUnitXMLDirectory": "./test/out",
     "outputPath": "./out/report.xml"
 }

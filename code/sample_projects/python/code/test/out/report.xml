@@ -11,7 +11,7 @@
         <testcase classname="test.test_simple" name="test_skipping" time="0.000">
             <skipped type="pytest.skip"
                 message="this test will be skipped, to see how pytest handles skipped tests in JUnit XML reports">/home/ruben/dev/bachelor/project/code/sample_projects/python/code/test/test_simple.py:35:
-                this test will be skipped, to see how pytest handles skipped tests in JUnit XML
+                this test will be skipped, to see how pytest handles skipped tests in JUnit XML. testtest
                 reports</skipped>
         </testcase>
         <testcase classname="test.test_identity" name="test_copy" time="0.000" />

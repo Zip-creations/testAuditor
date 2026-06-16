@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+BASE_DIR="$(pwd)"
 HOOK_FILE="$(readlink -f "$0")"
 SCRIPT_DIR="$(cd "$(dirname "$HOOK_FILE")" && pwd)"
 WORK_DIR="$SCRIPT_DIR/../../code"  # dir which contains the binary and cofig.json
@@ -23,6 +24,11 @@ do
     fi
     output="$("$BINARY" -c "$note")"
 
-    echo "Output from testAuditor:"
-    echo "$output"
+    cd "$BASE_DIR"
+    if [[ -n "$output" ]]; then
+        git notes append -m "$output" "$newrev"
+    fi
+
+    echo "Complete gitnote:"
+    git notes show "$newrev"
 done

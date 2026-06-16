@@ -63,7 +63,7 @@ func main() {
 			</testsuite>`  // test
 	
 	modifiedDiscoveryPath := flag.String("disc", "", "override test discovery path")
-	modifiedOutputPath := flag.String("out", "", "override output path")
+	modifiedExecutionPath := flag.String("out", "", "override output path")
 	contentString := flag.String("c", dummyGitNote, "provide JUnit XML content")  // TODO: remove default
 	flag.Parse()
 
@@ -84,9 +84,13 @@ func main() {
 		}
 	}
 
-	outputPath := config.OutputPath
-	if *modifiedOutputPath != "" {
-		outputPath = *modifiedOutputPath
+	executionCmd := config.TestExecutionPath
+	if *modifiedExecutionPath != "" {
+	parts := strings.Split(*modifiedExecutionPath, " ")
+		executionCmd = cfg.Command{
+			Command: parts[0],
+			Args: parts[1:],
+		}
 	}
 
 	// Read all existing tests from the user-configured script
@@ -106,6 +110,13 @@ func main() {
 	// fmt.Println("Suites from JUnit XML:\n", allSuitesJUnit, "\n")  // Debug
 
 	report := out.MatchTests(allSuites, allSuitesJUnit)
-	out.WriteXMLToFile(report, outputPath)
+	if len(report) == 0 {
+		return
+	}
+	executionErr := out.RunTestScript(executionCmd, report)
+	if executionErr != nil {
+		fmt.Println(executionErr)
+		return
+	}
 	fmt.Println("Successfully created report: \n", report)
 }

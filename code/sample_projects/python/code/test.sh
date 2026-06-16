@@ -1,6 +1,7 @@
 #!/usr/bin/bash
 
-PYTHONPATH=code python3 -m pytest test/test_simple.py test/test_identity.py --tap-files #--junit-xml="test/out/report.xml"
+# PYTHONPATH=code python3 -m pytest test/test_simple.py test/test_identity.py --junit-xml="test/out/report.xml"
+PYTHONPATH="$PYTHONPATH_DIR" python3 -m pytest "$@" --junit-xml="$REPORT_PATH"
 # TEST_FILES=("tests/tests_simple.py" "tests/tests_identity.py")
 
 # if [ "$#" -eq 0 ]; then

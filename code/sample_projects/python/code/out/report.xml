@@ -8,7 +8,7 @@
     </testcase>
   </testsuite>
   <testsuite name="not executed">
-    <testcase classname="test.test_simple" name="test_simple" qualifiedName="test/test_simple.py::test_simple" result="passed"></testcase>
-    <testcase classname="test.test_simple" name="test_simple_two" qualifiedName="test/test_simple.py::test_simple_two" result="passed"></testcase>
+    <testcase classname="test.test_simple" name="test_simple" qualifiedName="test/test_simple.py::test_simple" result="notExecuted"></testcase>
+    <testcase classname="test.test_simple" name="test_simple_two" qualifiedName="test/test_simple.py::test_simple_two" result="notExecuted"></testcase>
   </testsuite>
 </testsuites>

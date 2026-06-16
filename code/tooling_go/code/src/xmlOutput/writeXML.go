@@ -2,18 +2,28 @@ package xmlOutput
 
 import "fmt"
 import "os"
-import "encoding/xml"
-import "path/filepath"
+import "os/exec"
+import cfg "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/config"
 
 
-func WriteXMLToFile(report Testsuites, filePath string) error {
-	dir := filepath.Dir(filePath)
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return fmt.Errorf("Error creating directories for path %s:\n %w", dir, err)
-	}
-	data, err := xml.MarshalIndent(report, "", "  ")
+func RunTestScript(command cfg.Command , qualifiedNames []string) error {
+	out, err := exec.Command(command.Command, command.Args...).CombinedOutput()
 	if err != nil {
-		return fmt.Errorf("Error while marshalling Report XML:\n %w", err)
+		return fmt.Errorf("Error executing test discovery script: %w\n%s", err, out)
 	}
-	return os.WriteFile(filePath, data, 0644)
+	args := make([]string, 0, len(command.Args)+len(qualifiedNames))
+	args = append(args, command.Args...)
+	args = append(args, qualifiedNames...)
+
+	cmd := exec.Command(command.Command, args...)
+
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Stdin = os.Stdin
+
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("test execution script failed: %w", err)
+	}
+
+	return nil
 }

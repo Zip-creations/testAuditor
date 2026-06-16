@@ -3,6 +3,8 @@
         "command": "./examples/example_testDiscovery.sh",
         "args": []
     },
-    "jUnitXMLDirectory": "./examples/jUnit_XML",
-    "outputPath": "./out/report.xml"
+    "TestExecutionPath": {
+        "command": "./examples/test.sh",
+        "args": []
+    }
 }

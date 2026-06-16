@@ -3,8 +3,7 @@ package config
 
 type Config struct {
 	TestDiscoveryPath Command `json:"testDiscoveryPath"`
-	JUnitXMLDirectory string `json:"jUnitXMLDirectory"`
-	OutputPath string `json:"outputPath"`
+	TestExecutionPath Command `json:"testExecutionPath"`
 }
 
 type Command struct {

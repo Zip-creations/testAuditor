@@ -3,5 +3,5 @@
         "command": "./testDiscovery.sh",
         "args": []
     },
-    "outputPath": "./out/report.xml"
+    "outputPath": "./test.sh"
 }

@@ -21,5 +21,8 @@ do
         echo "Binary nicht gefunden oder nicht ausführbar: $BINARY"
         exit 1
     fi
-    "$BINARY" -c "$note"
+    output="$("$BINARY" -c "$note")"
+
+    echo "Output from testAuditor:"
+    echo "$output"
 done

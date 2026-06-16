@@ -1,11 +1,12 @@
 package xmlOutput
 
 import "fmt"
+import "os"
 import "os/exec"
 import cfg "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/config"
 
 
-func RunTestScript(command cfg.Command , qualifiedNames []string) error {
+func RunTestScript(command cfg.Command , qualifiedNames []string) ([]byte, error) {
 	// out, err := exec.Command(command.Command, command.Args...).CombinedOutput()
 	// if err != nil {
 	// 	return fmt.Errorf("Error executing test discovery script: %w\n%s", err, out)
@@ -15,14 +16,12 @@ func RunTestScript(command cfg.Command , qualifiedNames []string) error {
 	args = append(args, qualifiedNames...)
 
 	cmd := exec.Command(command.Command, args...)
-	output, err := cmd.CombinedOutput()
-
-	fmt.Println("Output from test script:")
-	fmt.Println(string(output))
+	cmd.Stderr = os.Stderr
+	output, err := cmd.Output()
 
 	if err != nil {
-		return fmt.Errorf("test execution script failed: %w", err)
+		return nil, fmt.Errorf("Error while executing test script:\n %w", err)
 	}
 
-	return nil
+	return output, nil
 }

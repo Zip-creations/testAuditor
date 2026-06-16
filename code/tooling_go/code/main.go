@@ -3,6 +3,7 @@ package main
 import "fmt"
 import "flag"
 import "strings"
+import "os"
 import cfg "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/config"
 import junit "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/jUnit"
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/code/tooling_go/code/src/testDiscovery"
@@ -63,7 +64,7 @@ func main() {
 			</testsuite>`  // test
 	
 	modifiedDiscoveryPath := flag.String("disc", "", "override test discovery path")
-	modifiedExecutionPath := flag.String("out", "", "override output path")
+	modifiedExecutionPath := flag.String("exec", "", "override test execution path")
 	contentString := flag.String("c", dummyGitNote, "provide JUnit XML content")  // TODO: remove default
 	flag.Parse()
 
@@ -114,9 +115,11 @@ func main() {
 		fmt.Println("All discovered tests have already been executed")
 		return
 	}
-	executionErr := out.RunTestScript(executionCmd, report)
+	output, executionErr := out.RunTestScript(executionCmd, report)
+	fmt.Println("Output from test script:")
+	fmt.Println(string(output))
 	if executionErr != nil {
-		fmt.Println(executionErr)
+		fmt.Fprintln(os.Stderr, executionErr)
 		return
 	}
 	fmt.Println("Successfully created report: \n", report)

@@ -115,11 +115,13 @@ func main() {
 		fmt.Println("All discovered tests have already been executed.\nTerminating.")
 		return
 	}
+
+	// Try to launch test execution script. If successfull, print the output so the hook can pick it up from stdout
 	output, executionErr := out.RunTestScript(executionCmd, report)
-	fmt.Println(string(output))
 	if executionErr != nil {
 		fmt.Fprintln(os.Stderr, executionErr)
 		return
 	}
-	fmt.Println("Successfully created report: \n", report)
+	fmt.Println(string(output))
+	// fmt.Println("Successfully created report: \n", report)
 }

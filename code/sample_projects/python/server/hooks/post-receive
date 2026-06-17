@@ -6,6 +6,8 @@ SCRIPT_DIR="$(cd "$(dirname "$HOOK_FILE")" && pwd)"
 WORK_DIR="$SCRIPT_DIR/../../code"  # dir which contains the binary and cofig.json
 BINARY="$WORK_DIR/testAuditor"
 
+OUTPUT_NOTES_REF="testAudit"
+
 while read -r oldrev newrev refname
 do
     if [[ "$refname" == refs/notes/* ]]; then
@@ -26,9 +28,10 @@ do
 
     cd "$BASE_DIR"
     if [[ -n "$output" ]]; then
-        git notes append -m "$output" "$newrev"
+        git notes --ref="$OUTPUT_NOTES_REF" append -m "$output" "$newrev"
     fi
 
-    echo "Complete gitnote:"
-    git notes show "$newrev"
+    echo "#hook: testAuditor added this XMl to the gitnotes in ref \"$OUTPUT_NOTES_REF:\""
+    git notes --ref="$OUTPUT_NOTES_REF" show "$newrev"
 done
+ 

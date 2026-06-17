@@ -31,7 +31,6 @@ do
         git notes --ref="$OUTPUT_NOTES_REF" append -m "$output" "$newrev"
     fi
 
-    echo "#hook: testAuditor added this XMl to the gitnotes in ref \"$OUTPUT_NOTES_REF:\""
+    echo "#hook: testAuditor added the following XMl to the gitnotes in ref \"$OUTPUT_NOTES_REF:\""
     git notes --ref="$OUTPUT_NOTES_REF" show "$newrev"
 done
- 

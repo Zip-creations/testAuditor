@@ -7,7 +7,7 @@ import "os"
 import cfg "github.com/Zip-creations/optimize_CI_deterministic_builds/src/code/config"
 import junit "github.com/Zip-creations/optimize_CI_deterministic_builds/src/code/jUnit"
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/code/testDiscovery"
-import out "github.com/Zip-creations/optimize_CI_deterministic_builds/src/code/xmlOutput"
+import out "github.com/Zip-creations/optimize_CI_deterministic_builds/src/code/generateOutput"
 
 func main() {
 	dummyGitNote := `<?xml version="1.0" encoding="utf-8"?>
@@ -95,7 +95,7 @@ func main() {
 	}
 
 	// Read all existing tests from the user-configured script
-	allSuites, err := disc.RunTestDiscoveryScript(discoveryCmd)
+	allSuites, err := disc.RunTestDiscovery(discoveryCmd)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -117,7 +117,7 @@ func main() {
 	}
 
 	// Try to launch test execution script. If successfull, print the output so the hook can pick it up from stdout
-	output, executionErr := out.RunTestScript(executionCmd, report)
+	output, executionErr := out.RunTestExecution(executionCmd, report)
 	if executionErr != nil {
 		fmt.Fprintln(os.Stderr, executionErr)
 		return

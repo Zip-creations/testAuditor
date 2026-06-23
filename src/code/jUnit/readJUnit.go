@@ -22,7 +22,7 @@ func ReadJUnitTestSuites(parts []string) (JUnitTestsuites, error) {
 		testSuites, err := ReadJUnitTestSuite(part)
 		if err != nil {
 			fmt.Println(err)  // TODO: log error somehow
-			continue  // If one file is broken: skip and continue with the others
+			continue  // If one section is broken: skip and continue with the others
 		}
 		allSuites.Testsuites = append(allSuites.Testsuites, testSuites...)
 	}

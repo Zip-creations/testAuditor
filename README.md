@@ -1,5 +1,5 @@
 # optimize_CI_deterministic_builds
-Dieses Repository enthält den Code für ein Tool, dass ich im Rahmen meiner Bachelorarbeit entwickelt habe (siehe [Repo der Bachelorarbeit](https://github.com/Zip-creations/BA_latex)).
+Dieses Repository enthält den Code für ein Tool, dass ich im Rahmen meiner Bachelorarbeit entwickelt habe (siehe [Repo der Bachelorarbeit](https://github.com/Zip-creations/BA_latex)).<br>
 [Hier](https://github.com/Zip-creations/BA_showcase) befindet sich ein Demoprojekt zur Anwendung des Tool. 
 
 Tool can be build with

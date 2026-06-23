@@ -100,6 +100,10 @@ func main() {
 		fmt.Println(err)
 		return
 	}
+	if len(allSuites.DiscoveryTestcases) == 0 {
+		fmt.Println("test discovery resulted in 0 tests found. Aborting.")
+		return
+	}
 	// fmt.Println("Suits from discovery:\n", allSuites, "\n")  // Debug
 
 	// Read all tests in the JUnit XML output of the last run (if existing)

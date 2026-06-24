@@ -71,8 +71,8 @@ func main() {
 	// Read config
 	config, err := cfg.ReadConfig("./config.json")
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	// fmt.Println("config:\n", config, "\n")  // Debug
 
@@ -97,8 +97,8 @@ func main() {
 	// Read all existing tests from the user-configured script
 	allSuites, err := disc.RunTestDiscovery(discoveryCmd)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	if len(allSuites.DiscoveryTestcases) == 0 {
 		fmt.Println("test discovery resulted in 0 tests found. Aborting.")
@@ -109,8 +109,8 @@ func main() {
 	// Read all tests in the JUnit XML output of the last run (if existing)
 	allSuitesJUnit, err := junit.ReadGitNote(*contentString)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
 	}
 	// fmt.Println("Suites from JUnit XML:\n", allSuitesJUnit, "\n")  // Debug
 
@@ -124,7 +124,7 @@ func main() {
 	output, executionErr := out.RunTestExecution(executionCmd, report)
 	if executionErr != nil {
 		fmt.Fprintln(os.Stderr, executionErr)
-		return
+		os.Exit(1)
 	}
 	fmt.Println(string(output))
 	// fmt.Println("Successfully created report: \n", report)

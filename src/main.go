@@ -74,7 +74,6 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	// fmt.Println("config:\n", config, "\n")  // Debug
 
 	discoveryCmd := config.TestDiscoveryPath
 	if *modifiedDiscoveryPath != "" {
@@ -101,10 +100,10 @@ func main() {
 		os.Exit(1)
 	}
 	if len(allSuites.DiscoveryTestcases) == 0 {
-		fmt.Println("test discovery resulted in 0 tests found. Aborting.")
-		return
+		// write on Stderr, since Stdout is the expected route for the produced XML
+		fmt.Fprintln(os.Stderr, "test discovery resulted in 0 tests found. Aborting.")
+		os.Exit(0)
 	}
-	// fmt.Println("Suits from discovery:\n", allSuites, "\n")  // Debug
 
 	// Read all tests in the JUnit XML output of the last run (if existing)
 	allSuitesJUnit, err := junit.ReadGitNote(*contentString)
@@ -112,12 +111,12 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	// fmt.Println("Suites from JUnit XML:\n", allSuitesJUnit, "\n")  // Debug
 
 	report := out.MatchTests(allSuites, allSuitesJUnit)
 	if len(report) == 0 {
-		fmt.Println("All discovered tests have already been executed.\nTerminating.")
-		return
+		// write on Stderr, since Stdout is the expected route for the produced XML
+		fmt.Fprintln(os.Stderr, "All discovered tests have already been executed.\nTerminating.")
+		os.Exit(0)
 	}
 
 	// Try to launch test execution script. If successfull, print the output so the hook can pick it up from stdout
@@ -127,5 +126,4 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println(string(output))
-	// fmt.Println("Successfully created report: \n", report)
 }

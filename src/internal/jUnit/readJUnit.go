@@ -8,6 +8,12 @@ import "encoding/xml"
 func ReadGitNote(content string)(JUnitTestsuites, error) {
 	// This asssumes one file is provided, with a number of Junit XMl files mashed into one file by gitnotes, separated by an empty line
 	// JUnit XML files CAN NOT include empty lines, since empty lines are used by gitnotes as default separator!
+	if content == "" {
+		return JUnitTestsuites{
+			XMLName: xml.Name{Local: "default"},
+			Testsuites: []JUnitTestsuite{},
+		}, nil
+	}
 	re := regexp.MustCompile(`\r?\n\r?\n`)
 	parts := re.Split(content, -1)
 	// for _, part := range parts {

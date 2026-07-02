@@ -5,10 +5,10 @@ import "encoding/xml"
 import iparse "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/parseInput"
 
 
-func ReadJUnitTestSuites(reports iparse.Reports) (JUnitTestsuites, error) {
+func ParseJUnitTestSuites(reports iparse.Reports) (JUnitTestsuites, error) {
 	var allSuites JUnitTestsuites
 	for _, part := range reports.Reports {
-		testSuites, err := ReadJUnitTestSuite(part.Content)
+		testSuites, err := ParseJUnitTestSuite(part.Content)
 		if err != nil {
 			fmt.Println(err)  // TODO: log error somehow
 			continue  // If one section is broken: skip and continue with the others
@@ -18,9 +18,10 @@ func ReadJUnitTestSuites(reports iparse.Reports) (JUnitTestsuites, error) {
 	return allSuites, nil
 }
 
-func ReadJUnitTestSuite(part string) ([]JUnitTestsuite, error) {
+func ParseJUnitTestSuite(part string) ([]JUnitTestsuite, error) {
 	var testsuites JUnitTestsuites
 	var testsuite JUnitTestsuite
+	// Since both tags can appear as root tag in JUnit-XMl, try both if the first couldn't be parsed
 	marshalErr1 := xml.Unmarshal([]byte(part), &testsuite)
 	if marshalErr1 == nil {
 		return []JUnitTestsuite{testsuite}, nil

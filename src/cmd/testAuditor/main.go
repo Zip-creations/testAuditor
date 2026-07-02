@@ -11,6 +11,7 @@ import input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/inte
 func main() {
 	stdInput, err := io.ReadAll(os.Stdin)
 	if err != nil {
+		// write on Stderr, since Stdout is the expected channel for the produced XML
 		fmt.Fprintln(os.Stderr, "failed to read stdin:", err)
 		os.Exit(1)
 	}
@@ -20,7 +21,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, "failed to parse input:", err)
 		os.Exit(1)
 	}
-	fmt.Println("ReadInput result:", parsedInput)
+	// fmt.Println("ParseInput result:", parsedInput)  // Debug
 
 	// Parse all existing tests from input
 	allSuites, err := disc.ParseTestDiscovery(parsedInput.TestDiscovery.Content)
@@ -30,11 +31,10 @@ func main() {
 	}
 
 	if len(allSuites.DiscoveryTestcases) == 0 {
-		// write on Stderr, since Stdout is the expected route for the produced XML
 		fmt.Fprintln(os.Stderr, "test discovery resulted in 0 tests found. Aborting.")
 		os.Exit(0)
 	}
-	fmt.Println("ReadDiscovery result:", allSuites)
+	// fmt.Println("ParseTestDiscovery result:", allSuites)  // Debug
 
 	// Parse all existing reports from input
 	existingReports, err := rep.ParseJUnitTestSuites(parsedInput.Reports)
@@ -42,7 +42,7 @@ func main() {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
-	fmt.Println("ParseJUnitTestSuites result:", existingReports)
+	// fmt.Println("ParseJUnitTestSuites result:", existingReports)  // Debug
 
 	report := out.MatchTests(allSuites, existingReports)
 	if len(report) == 0 {
@@ -50,5 +50,6 @@ func main() {
 		fmt.Fprintln(os.Stderr, "All discovered tests have already been executed.\nTerminating.")
 		os.Exit(0)
 	}
-	fmt.Println("report: ", report)
+	// Write result to stdout
+	fmt.Println(report)
 }

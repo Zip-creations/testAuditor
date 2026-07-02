@@ -3,9 +3,9 @@ package main
 import "fmt"
 import "os"
 import "io"
-import junit "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/jUnit"
+import rep "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/report"
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/testDiscovery"
-import out "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/generateOutput"
+import out "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/matchTests"
 import iparse "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/parseInput"
 
 func main() {
@@ -35,7 +35,7 @@ func main() {
 	}
 	fmt.Println("ReadDiscovery result:", allSuites)
 
-	existingReports, err := junit.ReadJUnitTestSuites(parsedInput.Reports)
+	existingReports, err := rep.ReadJUnitTestSuites(parsedInput.Reports)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)

@@ -1,10 +1,10 @@
 package xmlOutput
 
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/testDiscovery"
-import junit "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/jUnit"
+import rep "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/report"
 
 
-func MatchTests(discoverySuite disc.DiscoveryTestsuite, junitSuites junit.JUnitTestsuites) []string {
+func MatchTests(discoverySuite disc.DiscoveryTestsuite, junitSuites rep.JUnitTestsuites) []string {
 	var result []string
 	for _, testcaseXML := range discoverySuite.DiscoveryTestcases {
 		found := false

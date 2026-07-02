@@ -47,5 +47,7 @@ func main() {
 
 	result := out.MatchTests(allSuites, existingReports)
 	// Write result to stdout
-	fmt.Println(result)
+	for _, test := range result {
+		fmt.Println(test)
+	}
 }

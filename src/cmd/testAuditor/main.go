@@ -9,8 +9,21 @@ import cfg "github.com/Zip-creations/optimize_CI_deterministic_builds/src/intern
 import junit "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/jUnit"
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/testDiscovery"
 import out "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/generateOutput"
+import iparse "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/parseInput"
 
 func main() {
+	input, err := io.ReadAll(os.Stdin)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "failed to read stdin:", err)
+		os.Exit(1)
+	}
+	temp, err1 := iparse.ReadInput(string(input))
+	if err1 != nil {
+		fmt.Fprintln(os.Stderr, "failed to parse input:", err1)
+		os.Exit(1)
+	}
+	fmt.Println("ReadInput result:", temp)
+
 	modifiedDiscoveryPath := flag.String("disc", "", "override test discovery path")
 	modifiedExecutionPath := flag.String("exec", "", "override test execution path")
 	flag.Parse()
@@ -22,11 +35,6 @@ func main() {
 		os.Exit(1)
 	}
 
-	input, err := io.ReadAll(os.Stdin)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "failed to read stdin:", err)
-		os.Exit(1)
-	}
 
 	discoveryCmd := config.TestDiscoveryPath
 	if *modifiedDiscoveryPath != "" {

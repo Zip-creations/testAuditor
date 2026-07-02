@@ -2,30 +2,31 @@ package jUnit
 
 
 import "fmt"
-import "regexp"
+// import "regexp"
 import "encoding/xml"
+import iparse "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/parseInput"
 
-func ReadGitNote(content string)(JUnitTestsuites, error) {
-	// This asssumes one file is provided, with a number of Junit XMl files mashed into one file by gitnotes, separated by an empty line
-	// JUnit XML files CAN NOT include empty lines, since empty lines are used by gitnotes as default separator!
-	if content == "" {
-		return JUnitTestsuites{
-			XMLName: xml.Name{Local: "default"},
-			Testsuites: []JUnitTestsuite{},
-		}, nil
-	}
-	re := regexp.MustCompile(`\r?\n\r?\n`)
-	parts := re.Split(content, -1)
-	// for _, part := range parts {
-	// 	fmt.Println("Part: ", part)
-	// }
-	return ReadJUnitTestSuites(parts)
-}
+// func ReadGitNote(content string)(JUnitTestsuites, error) {
+// 	// This asssumes one file is provided, with a number of Junit XMl files mashed into one file by gitnotes, separated by an empty line
+// 	// JUnit XML files CAN NOT include empty lines, since empty lines are used by gitnotes as default separator!
+// 	if content == "" {
+// 		return JUnitTestsuites{
+// 			XMLName: xml.Name{Local: "default"},
+// 			Testsuites: []JUnitTestsuite{},
+// 		}, nil
+// 	}
+// 	re := regexp.MustCompile(`\r?\n\r?\n`)
+// 	parts := re.Split(content, -1)
+// 	// for _, part := range parts {
+// 	// 	fmt.Println("Part: ", part)
+// 	// }
+// 	return ReadJUnitTestSuites(parts)
+// }
 
-func ReadJUnitTestSuites(parts []string) (JUnitTestsuites, error) {
+func ReadJUnitTestSuites(reports iparse.Reports) (JUnitTestsuites, error) {
 	var allSuites JUnitTestsuites
-	for _, part := range parts {
-		testSuites, err := ReadJUnitTestSuite(part)
+	for _, part := range reports.Reports {
+		testSuites, err := ReadJUnitTestSuite(part.Content)
 		if err != nil {
 			fmt.Println(err)  // TODO: log error somehow
 			continue  // If one section is broken: skip and continue with the others

@@ -15,7 +15,7 @@ type TestDiscovery struct {
 
 type Reports struct {
 	XMLName   xml.Name    `xml:"reports"`
-	Report []Report `xml:"report"`
+	Reports []Report `xml:"report"`
 }
 
 type Report struct {

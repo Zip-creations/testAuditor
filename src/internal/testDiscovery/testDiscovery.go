@@ -10,13 +10,14 @@ func RunTestDiscovery(command cfg.Command) (DiscoveryTestsuite, error) {
 	if err != nil {
 		return DiscoveryTestsuite{}, fmt.Errorf("Error executing test discovery script: %w\n%s", err, out)
 	}
-	return XMLtoDiscoveryTestsuite([]byte(out), &DiscoveryTestsuite{})
+	return XMLtoDiscoveryTestsuite(string(out))
 }
 
-func XMLtoDiscoveryTestsuite(data []byte, suite *DiscoveryTestsuite) (DiscoveryTestsuite, error) {
-	err := xml.Unmarshal(data, suite)
+func XMLtoDiscoveryTestsuite(data string) (DiscoveryTestsuite, error) {
+	var suite DiscoveryTestsuite
+	err := xml.Unmarshal([]byte(data), &suite)
 	if err != nil {
-		return *suite, fmt.Errorf("Error while unmarshalling user generated XML:\n %w", err)
+		return suite, fmt.Errorf("Error while unmarshalling user generated XML:\n %w", err)
 	}
-	return *suite, err
+	return suite, err
 }

@@ -2,10 +2,10 @@ package jUnit
 
 import "fmt"
 import "encoding/xml"
-import iparse "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/parseInput"
+import input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/input"
 
 
-func ParseJUnitTestSuites(reports iparse.Reports) (JUnitTestsuites, error) {
+func ParseJUnitTestSuites(reports input.Reports) (JUnitTestsuites, error) {
 	var allSuites JUnitTestsuites
 	for _, part := range reports.Reports {
 		testSuites, err := ParseJUnitTestSuite(part.Content)

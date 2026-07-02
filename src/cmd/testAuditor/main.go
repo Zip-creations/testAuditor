@@ -6,7 +6,7 @@ import "io"
 import rep "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/report"
 import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/testDiscovery"
 import out "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/matchTests"
-import input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/parseInput"
+import input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/input"
 
 func main() {
 	stdInput, err := io.ReadAll(os.Stdin)

@@ -4,20 +4,32 @@ import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/inter
 import rep "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/report"
 
 
+type testKey struct {
+	Classname string
+	Name      string
+}
+
 func MatchTests(discoverySuite disc.DiscoveryTestsuite, junitSuites rep.JUnitTestsuites) []string {
-	var result []string
-	for _, testcaseXML := range discoverySuite.DiscoveryTestcases {
-		found := false
-		for _, junitSuite := range junitSuites.Testsuites {
-			for _, junitTestcase := range junitSuite.Testcases {
-				if testcaseXML.Name == junitTestcase.Name && testcaseXML.Classname == junitTestcase.Classname {
-					found = true
-					break
-				}
-			}
-			if found {break}
+	seen := make(map[testKey]struct{})
+
+	for _, junitSuite := range junitSuites.Testsuites {
+		for _, junitTestcase := range junitSuite.Testcases {
+			seen[testKey{
+				Classname: junitTestcase.Classname,
+				Name:      junitTestcase.Name,
+			}] = struct{}{}
 		}
-		if !found {
+	}
+
+	result := make([]string, 0, len(discoverySuite.DiscoveryTestcases))
+
+	for _, testcaseXML := range discoverySuite.DiscoveryTestcases {
+		key := testKey{
+			Classname: testcaseXML.Classname,
+			Name:      testcaseXML.Name,
+		}
+
+		if _, found := seen[key]; !found {
 			result = append(result, testcaseXML.QualifiedName)
 		}
 	}

@@ -4,11 +4,6 @@ import disc "github.com/Zip-creations/optimize_CI_deterministic_builds/src/inter
 import rep "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/report"
 
 
-type testKey struct {
-	Classname string
-	Name      string
-}
-
 func MatchTests(discoverySuite disc.DiscoveryTestsuite, seen map[rep.TestKey]struct{}) []string {
 	result := make([]string, 0, len(discoverySuite.DiscoveryTestcases))
 	for _, testcaseXML := range discoverySuite.DiscoveryTestcases {

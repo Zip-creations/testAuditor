@@ -9,6 +9,11 @@ import (
 	input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/input"
 )
 
+type TestKey struct {
+	Classname string
+	Name      string
+}
+
 func ParseJUnitTestcaseKeys(reports input.Reports) (map[TestKey]struct{}, error) {
 	seen := make(map[TestKey]struct{})
 	for _, report := range reports.Reports {

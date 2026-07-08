@@ -9,26 +9,13 @@ type testKey struct {
 	Name      string
 }
 
-func MatchTests(discoverySuite disc.DiscoveryTestsuite, junitSuites rep.JUnitTestsuites) []string {
-	seen := make(map[testKey]struct{})
-
-	for _, junitSuite := range junitSuites.Testsuites {
-		for _, junitTestcase := range junitSuite.Testcases {
-			seen[testKey{
-				Classname: junitTestcase.Classname,
-				Name:      junitTestcase.Name,
-			}] = struct{}{}
-		}
-	}
-
+func MatchTests(discoverySuite disc.DiscoveryTestsuite, seen map[rep.TestKey]struct{}) []string {
 	result := make([]string, 0, len(discoverySuite.DiscoveryTestcases))
-
 	for _, testcaseXML := range discoverySuite.DiscoveryTestcases {
-		key := testKey{
+		key := rep.TestKey{
 			Classname: testcaseXML.Classname,
 			Name:      testcaseXML.Name,
 		}
-
 		if _, found := seen[key]; !found {
 			result = append(result, testcaseXML.QualifiedName)
 		}

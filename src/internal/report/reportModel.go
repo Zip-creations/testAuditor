@@ -2,6 +2,10 @@ package jUnit
 
 import "encoding/xml"
 
+type TestKey struct {
+	Classname string
+	Name      string
+}
 
 type JUnitTestsuites struct {
 	XMLName   xml.Name    `xml:"testsuites"`

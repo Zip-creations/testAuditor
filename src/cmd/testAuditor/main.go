@@ -37,15 +37,16 @@ func main() {
 	}
 	// fmt.Println("ParseTestDiscovery result:", allSuites)  // Debug
 
-	// Parse all existing reports from input
-	existingReports, err := rep.ParseJUnitTestSuites(parsedInput.Reports)
+	// Parse all existing reports from input into a lookup set.
+	existingTests, err := rep.ParseJUnitTestcaseKeys(parsedInput.Reports)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
+
+	result := out.MatchTests(allSuites, existingTests)
 	// fmt.Println("ParseJUnitTestSuites result:", existingReports)  // Debug
 
-	result := out.MatchTests(allSuites, existingReports)
 	// Write result to stdout
 	for _, test := range result {
 		fmt.Println(test)

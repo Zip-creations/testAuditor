@@ -1,34 +1,61 @@
 package jUnit
 
-import "fmt"
-import "encoding/xml"
-import input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/input"
+import (
+	"encoding/xml"
+	"fmt"
+	"io"
+	"os"
+	"strings"
+	input "github.com/Zip-creations/optimize_CI_deterministic_builds/src/internal/input"
+)
 
-
-func ParseJUnitTestSuites(reports input.Reports) (JUnitTestsuites, error) {
-	var allSuites JUnitTestsuites
-	for _, part := range reports.Reports {
-		testSuites, err := ParseJUnitTestSuite(part.Content)
-		if err != nil {
-			fmt.Println(err)  // TODO: log error somehow
-			continue  // If one section is broken: skip and continue with the others
+func ParseJUnitTestcaseKeys(reports input.Reports) (map[TestKey]struct{}, error) {
+	seen := make(map[TestKey]struct{})
+	for _, report := range reports.Reports {
+		content := strings.TrimSpace(report.Content)
+		if content == "" {
+			continue
 		}
-		allSuites.Testsuites = append(allSuites.Testsuites, testSuites...)
+		if err := parseJUnitTestcaseKeys(content, seen); err != nil {
+			// If one report is broken, skip it and continue with the others.
+			fmt.Fprintln(os.Stderr, err)
+			continue
+		}
 	}
-	return allSuites, nil
+	return seen, nil
 }
 
-func ParseJUnitTestSuite(part string) ([]JUnitTestsuite, error) {
-	var testsuites JUnitTestsuites
-	var testsuite JUnitTestsuite
-	// Since both tags can appear as root tag in JUnit-XMl, try both if the first couldn't be parsed
-	marshalErr1 := xml.Unmarshal([]byte(part), &testsuite)
-	if marshalErr1 == nil {
-		return []JUnitTestsuite{testsuite}, nil
+func parseJUnitTestcaseKeys(content string, seen map[TestKey]struct{}) error {
+	decoder := xml.NewDecoder(strings.NewReader(content))
+	for {
+		token, err := decoder.Token()
+		if err == io.EOF {
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+		startElement, ok := token.(xml.StartElement)
+		if !ok {
+			continue
+		}
+		if startElement.Name.Local != "testcase" {
+			continue
+		}
+		var key TestKey
+		for _, attr := range startElement.Attr {
+			switch attr.Name.Local {
+			case "classname":
+				key.Classname = attr.Value
+			case "name":
+				key.Name = attr.Value
+			}
+		}
+		// Don't add the key if one or both of the key identification attributes is missing in the source.
+		// Testcases without those attributes set will be treaten as not found (or "not already executed")
+		if key.Classname == "" || key.Name == "" {
+			continue
+		}
+		seen[key] = struct{}{}
 	}
-	marshalErr2 := xml.Unmarshal([]byte(part), &testsuites)
-	if marshalErr2 == nil {
-		return testsuites.Testsuites, nil
-	}
-	return testsuites.Testsuites, fmt.Errorf("Error while unmarshalling JUnit XML:\n %w\n %w", marshalErr1, marshalErr2)
 }
